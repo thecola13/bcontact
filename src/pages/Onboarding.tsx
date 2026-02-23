@@ -12,13 +12,14 @@ import type {
     Experience,
 } from '../types/database.types';
 import { INITIAL_ONBOARDING_DATA } from '../types/database.types';
+import StepPassword from './onboarding/StepPassword';
 import StepIdentity from './onboarding/StepIdentity';
 import StepAcademics from './onboarding/StepAcademics';
 import StepPhoto from './onboarding/StepPhoto';
 import StepContacts from './onboarding/StepContacts';
 import './Onboarding.css';
 
-const STEPS = ['Identity', 'Academics', 'Photo', 'Contacts'] as const;
+const STEPS = ['Password', 'Identity', 'Academics', 'Photo', 'Contacts'] as const;
 
 export default function Onboarding() {
     const [step, setStep] = useState(0);
@@ -31,13 +32,14 @@ export default function Onboarding() {
 
     // ── Step Navigation ─────────────────────────────────
     const canGoNext = (): boolean => {
-        if (step === 0) {
+        // Step 0 (Password) has its own submit — handled by StepPassword
+        if (step === 1) {
             return data.identity.name.trim() !== '' && data.identity.surname.trim() !== '';
         }
-        if (step === 1) {
+        if (step === 2) {
             return data.academics.currentDegree !== '';
         }
-        return true; // Steps 2 & 3 are optional
+        return true; // Steps 3 & 4 are optional
     };
 
     const next = () => {
@@ -47,7 +49,8 @@ export default function Onboarding() {
     };
 
     const back = () => {
-        if (step > 0) setStep((s) => s - 1);
+        // Don't go back to step 0 (password) once completed
+        if (step > 1) setStep((s) => s - 1);
     };
 
     // ── Updaters ────────────────────────────────────────
@@ -164,6 +167,8 @@ export default function Onboarding() {
     };
 
     // ── Render ──────────────────────────────────────────
+    const isPasswordStep = step === 0;
+
     return (
         <div className="onboarding">
             <div className="bg-glow" />
@@ -191,15 +196,18 @@ export default function Onboarding() {
                 <div className="onboarding-card card">
                     <div className="step-content" key={step}>
                         {step === 0 && (
-                            <StepIdentity data={data.identity} onChange={updateIdentity} />
+                            <StepPassword onComplete={() => setStep(1)} />
                         )}
                         {step === 1 && (
-                            <StepAcademics data={data.academics} onChange={updateAcademics} />
+                            <StepIdentity data={data.identity} onChange={updateIdentity} />
                         )}
                         {step === 2 && (
-                            <StepPhoto data={data.photo} onChange={updatePhoto} />
+                            <StepAcademics data={data.academics} onChange={updateAcademics} />
                         )}
                         {step === 3 && (
+                            <StepPhoto data={data.photo} onChange={updatePhoto} />
+                        )}
+                        {step === 4 && (
                             <StepContacts data={data.contacts} onChange={updateContactsData} />
                         )}
                     </div>
@@ -210,43 +218,45 @@ export default function Onboarding() {
                         </div>
                     )}
 
-                    {/* Navigation */}
-                    <div className="onboarding-nav">
-                        <button
-                            type="button"
-                            className="btn-ghost"
-                            onClick={back}
-                            disabled={step === 0 || submitting}
-                        >
-                            ← Back
-                        </button>
+                    {/* Navigation — hidden on password step (it has its own button) */}
+                    {!isPasswordStep && (
+                        <div className="onboarding-nav">
+                            <button
+                                type="button"
+                                className="btn-ghost"
+                                onClick={back}
+                                disabled={step <= 1 || submitting}
+                            >
+                                ← Back
+                            </button>
 
-                        {step < STEPS.length - 1 ? (
-                            <button
-                                type="button"
-                                className="btn"
-                                onClick={next}
-                                disabled={!canGoNext()}
-                            >
-                                Continue →
-                            </button>
-                        ) : (
-                            <button
-                                type="button"
-                                className="btn"
-                                onClick={handleComplete}
-                                disabled={submitting}
-                            >
-                                {submitting ? (
-                                    <>
-                                        <span className="spinner" /> Saving…
-                                    </>
-                                ) : (
-                                    'Complete Setup ✓'
-                                )}
-                            </button>
-                        )}
-                    </div>
+                            {step < STEPS.length - 1 ? (
+                                <button
+                                    type="button"
+                                    className="btn"
+                                    onClick={next}
+                                    disabled={!canGoNext()}
+                                >
+                                    Continue →
+                                </button>
+                            ) : (
+                                <button
+                                    type="button"
+                                    className="btn"
+                                    onClick={handleComplete}
+                                    disabled={submitting}
+                                >
+                                    {submitting ? (
+                                        <>
+                                            <span className="spinner" /> Saving…
+                                        </>
+                                    ) : (
+                                        'Complete Setup ✓'
+                                    )}
+                                </button>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
