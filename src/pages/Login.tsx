@@ -44,7 +44,7 @@ export default function Login() {
     // Redirect if already authenticated
     useEffect(() => {
         if (!loading && user) {
-            navigate('/dashboard', { replace: true });
+            navigate('/onboarding', { replace: true });
         }
     }, [user, loading, navigate]);
 
@@ -55,7 +55,7 @@ export default function Login() {
         const { error } = await supabase.auth.signInWithOtp({
             email: data.email.toLowerCase(),
             options: {
-                emailRedirectTo: `${window.location.origin}/bcontact/dashboard`,
+                emailRedirectTo: `${window.location.origin}/bcontact/onboarding`,
             },
         });
 

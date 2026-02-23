@@ -1,0 +1,141 @@
+/* ===========================
+   Homepage Styles
+   ========================= */
+
+.home {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* ── Hero ─────────────────────── */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    padding: var(--space-2xl) var(--space-lg);
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 640px;
+}
+
+.hero-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--space-lg);
+}
+
+.hero-accent {
+    background: linear-gradient(135deg, var(--color-accent), #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-2xl);
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-cta {
+    padding: 0.9rem 2rem;
+    font-size: var(--font-size-lg);
+    text-decoration: none;
+}
+
+/* ── Features ────────────────── */
+.features {
+    padding: var(--space-2xl) var(--space-lg);
+    max-width: 960px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-lg);
+}
+
+.feature-card {
+    text-align: center;
+    padding: var(--space-2xl) var(--space-xl);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-glow);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-md);
+}
+
+.feature-card h3 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-sm);
+}
+
+.feature-card p {
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+}
+
+/* ── Privacy Callout ─────────── */
+.privacy-callout {
+    padding: var(--space-2xl) var(--space-lg);
+    max-width: 640px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.privacy-callout-inner {
+    text-align: center;
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    background: rgba(59, 130, 246, 0.04);
+}
+
+.privacy-callout h2 {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-md);
+}
+
+.privacy-callout p {
+    font-size: var(--font-size-md);
+    line-height: 1.7;
+}
+
+/* ── Footer ──────────────────── */
+.home-footer {
+    text-align: center;
+    padding: var(--space-2xl) var(--space-lg);
+    margin-top: auto;
+}
+
+/* ── Responsive ──────────────── */
+@media (max-width: 640px) {
+    .hero {
+        min-height: 60vh;
+        padding: var(--space-xl) var(--space-md);
+    }
+
+    .features {
+        padding: var(--space-xl) var(--space-md);
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+}

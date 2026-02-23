@@ -1,18 +1,19 @@
 import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
 
-interface ProtectedRouteProps {
+interface OnboardingRouteProps {
     children: React.ReactNode;
-    requireOnboarding?: boolean;
 }
 
-export default function ProtectedRoute({
-    children,
-    requireOnboarding = true,
-}: ProtectedRouteProps) {
+/**
+ * Inverse of ProtectedRoute:
+ * - Not authenticated → /login
+ * - Already onboarded → /dashboard
+ * - Not onboarded → render children (the wizard)
+ */
+export default function OnboardingRoute({ children }: OnboardingRouteProps) {
     const { user, loading, profileLoading, isOnboarded } = useAuth();
 
-    // Still resolving session
     if (loading || profileLoading) {
         return (
             <div className="page-center">
@@ -21,14 +22,12 @@ export default function ProtectedRoute({
         );
     }
 
-    // Not authenticated
     if (!user) {
         return <Navigate to="/login" replace />;
     }
 
-    // Authenticated but hasn't completed onboarding
-    if (requireOnboarding && !isOnboarded) {
-        return <Navigate to="/onboarding" replace />;
+    if (isOnboarded) {
+        return <Navigate to="/dashboard" replace />;
     }
 
     return <>{children}</>;
