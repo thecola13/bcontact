@@ -20,8 +20,6 @@ export interface Contact {
     linkedin_url: string | null;
     visibility: 'private' | 'all_verified';
     updated_at: string | null;
-    linkedin: string | null;
-    instagram: string | null;
 }
 
 export type ExperienceType = 'degree' | 'course' | 'exchange' | 'internship';
@@ -73,8 +71,7 @@ export interface OnboardingPhoto {
 
 export interface OnboardingContacts {
     phone: string;
-    linkedin: string;
-    instagram: string;
+    linkedinUrl: string;
     visibility: 'private' | 'all_verified';
 }
 
@@ -94,7 +91,7 @@ export const INITIAL_ONBOARDING_DATA: OnboardingData = {
         exchange: { enabled: false, level: '', destination: '', semester: '' },
     },
     photo: { file: null, previewUrl: null },
-    contacts: { phone: '', linkedin: '', instagram: '', visibility: 'private' },
+    contacts: { phone: '', linkedinUrl: '', visibility: 'private' },
 };
 
 // ─── Bocconi Degree Lists ───────────────────────────────

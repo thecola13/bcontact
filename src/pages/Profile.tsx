@@ -88,8 +88,7 @@ export default function Profile() {
 
     // Contacts
     const [phone, setPhone] = useState('');
-    const [linkedin, setLinkedin] = useState('');
-    const [instagram, setInstagram] = useState('');
+    const [linkedinUrl, setLinkedinUrl] = useState('');
     const [visibility, setVisibility] = useState<'private' | 'all_verified'>('private');
 
     // Academics
@@ -134,8 +133,7 @@ export default function Profile() {
         fetchContacts(user.id).then((c) => {
             if (c) {
                 setPhone(c.phone ?? '');
-                setLinkedin(c.linkedin ?? '');
-                setInstagram(c.instagram ?? '');
+                setLinkedinUrl(c.linkedin_url ?? '');
                 setVisibility(c.visibility ?? 'private');
             }
             setLoadingContacts(false);
@@ -241,8 +239,7 @@ export default function Profile() {
         setSavingContacts(true);
         const { error } = await updateContacts(user.id, {
             phone: phone.trim() || null,
-            linkedin: linkedin.trim() || null,
-            instagram: instagram.trim() || null,
+            linkedin_url: linkedinUrl.trim() || null,
             visibility,
         });
         setSavingContacts(false);
@@ -557,18 +554,8 @@ export default function Profile() {
                                 id="prf-linkedin"
                                 type="text"
                                 placeholder="linkedin.com/in/yourname"
-                                value={linkedin}
-                                onChange={(e) => setLinkedin(e.target.value)}
-                            />
-                        </div>
-                        <div className="field-group">
-                            <label htmlFor="prf-instagram" className="field-label">Instagram</label>
-                            <input
-                                id="prf-instagram"
-                                type="text"
-                                placeholder="@yourhandle"
-                                value={instagram}
-                                onChange={(e) => setInstagram(e.target.value)}
+                                value={linkedinUrl}
+                                onChange={(e) => setLinkedinUrl(e.target.value)}
                             />
                         </div>
                         <div className="visibility-toggle">

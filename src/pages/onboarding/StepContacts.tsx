@@ -33,19 +33,8 @@ export default function StepContacts({ data, onChange }: StepContactsProps) {
                         id="onb-linkedin"
                         type="text"
                         placeholder="linkedin.com/in/yourname"
-                        value={data.linkedin}
-                        onChange={(e) => onChange({ linkedin: e.target.value })}
-                    />
-                </div>
-
-                <div className="field-group">
-                    <label htmlFor="onb-instagram" className="field-label">Instagram</label>
-                    <input
-                        id="onb-instagram"
-                        type="text"
-                        placeholder="@yourhandle"
-                        value={data.instagram}
-                        onChange={(e) => onChange({ instagram: e.target.value })}
+                        value={data.linkedinUrl}
+                        onChange={(e) => onChange({ linkedinUrl: e.target.value })}
                     />
                 </div>
 

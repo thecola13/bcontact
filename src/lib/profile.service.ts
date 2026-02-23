@@ -117,3 +117,129 @@ export async function uploadAvatar(
 
     return { url: data.publicUrl, error: null };
 }
+
+// ─── Search Queries ─────────────────────────────────────
+
+/**
+ * Text search across profiles (name, degree).
+ * Only returns onboarded profiles, excludes the calling user.
+ */
+export async function searchProfiles(
+    query: string,
+    currentUserId: string,
+    limit = 50,
+    offset = 0
+): Promise<Profile[]> {
+    const pattern = `%${query}%`;
+
+    const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('onboarding_completed', true)
+        .neq('id', currentUserId)
+        .or(`first_name.ilike.${pattern},last_name.ilike.${pattern},current_degree.ilike.${pattern}`)
+        .range(offset, offset + limit - 1);
+
+    if (error) {
+        console.error('searchProfiles error:', error.message);
+        return [];
+    }
+    return (data as Profile[]) ?? [];
+}
+
+/**
+ * Fetch profiles by an array of IDs (for merging with experience search results).
+ */
+export async function fetchProfilesByIds(ids: string[]): Promise<Profile[]> {
+    if (ids.length === 0) return [];
+
+    const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('onboarding_completed', true)
+        .in('id', ids);
+
+    if (error) {
+        console.error('fetchProfilesByIds error:', error.message);
+        return [];
+    }
+    return (data as Profile[]) ?? [];
+}
+
+/**
+ * Search experiences filtered by type, returning matching user_ids.
+ * Searches across organization, role, and code fields.
+ */
+export async function searchExperienceUsers(
+    query: string,
+    expType: string,
+    currentUserId: string,
+    limit = 200
+): Promise<string[]> {
+    const pattern = `%${query}%`;
+
+    let q = supabase
+        .from('experiences')
+        .select('user_id')
+        .eq('exp_type', expType)
+        .neq('user_id', currentUserId)
+        .limit(limit);
+
+    if (query.trim()) {
+        q = q.or(`organization.ilike.${pattern},role.ilike.${pattern},code.ilike.${pattern}`);
+    }
+
+    const { data, error } = await q;
+
+    if (error) {
+        console.error('searchExperienceUsers error:', error.message);
+        return [];
+    }
+
+    // Deduplicate user_ids
+    const ids = new Set((data ?? []).map((r: { user_id: string }) => r.user_id));
+    return [...ids];
+}
+
+/**
+ * Fetch all experiences for a set of users (for result card badges).
+ */
+export async function fetchExperiencesForUsers(
+    userIds: string[]
+): Promise<Experience[]> {
+    if (userIds.length === 0) return [];
+
+    const { data, error } = await supabase
+        .from('experiences')
+        .select('*')
+        .in('user_id', userIds);
+
+    if (error) {
+        console.error('fetchExperiencesForUsers error:', error.message);
+        return [];
+    }
+    return (data as Experience[]) ?? [];
+}
+
+/**
+ * Browse all onboarded profiles (for initial empty-query state).
+ */
+export async function browseProfiles(
+    currentUserId: string,
+    limit = 50,
+    offset = 0
+): Promise<Profile[]> {
+    const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('onboarding_completed', true)
+        .neq('id', currentUserId)
+        .order('first_name', { ascending: true })
+        .range(offset, offset + limit - 1);
+
+    if (error) {
+        console.error('browseProfiles error:', error.message);
+        return [];
+    }
+    return (data as Profile[]) ?? [];
+}

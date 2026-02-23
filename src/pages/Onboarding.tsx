@@ -98,8 +98,7 @@ export default function Onboarding() {
             // 3. Update contacts
             const contactsResult = await updateContacts(user.id, {
                 phone: data.contacts.phone.trim() || null,
-                linkedin: data.contacts.linkedin.trim() || null,
-                instagram: data.contacts.instagram.trim() || null,
+                linkedin_url: data.contacts.linkedinUrl.trim() || null,
                 visibility: data.contacts.visibility,
             });
             if (contactsResult.error) throw new Error(contactsResult.error);
