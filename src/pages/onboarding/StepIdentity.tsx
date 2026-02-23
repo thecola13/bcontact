@@ -23,8 +23,8 @@ export default function StepIdentity({ data, onChange }: StepIdentityProps) {
                             id="onb-name"
                             type="text"
                             placeholder="Mario"
-                            value={data.name}
-                            onChange={(e) => onChange({ name: e.target.value })}
+                            value={data.firstName}
+                            onChange={(e) => onChange({ firstName: e.target.value })}
                             autoFocus
                         />
                     </div>
@@ -34,8 +34,8 @@ export default function StepIdentity({ data, onChange }: StepIdentityProps) {
                             id="onb-surname"
                             type="text"
                             placeholder="Rossi"
-                            value={data.surname}
-                            onChange={(e) => onChange({ surname: e.target.value })}
+                            value={data.lastName}
+                            onChange={(e) => onChange({ lastName: e.target.value })}
                         />
                     </div>
                 </div>

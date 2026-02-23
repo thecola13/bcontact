@@ -34,7 +34,7 @@ export default function Onboarding() {
     const canGoNext = (): boolean => {
         // Step 0 (Password) has its own submit — handled by StepPassword
         if (step === 1) {
-            return data.identity.name.trim() !== '' && data.identity.surname.trim() !== '';
+            return data.identity.firstName.trim() !== '' && data.identity.lastName.trim() !== '';
         }
         if (step === 2) {
             return data.academics.currentDegree !== '';
@@ -87,8 +87,8 @@ export default function Onboarding() {
 
             // 2. Update profile
             const profileResult = await updateProfile(user.id, {
-                name: data.identity.name.trim(),
-                surname: data.identity.surname.trim(),
+                first_name: data.identity.firstName.trim(),
+                last_name: data.identity.lastName.trim(),
                 current_degree: data.academics.currentDegree,
                 avatar_url: avatarUrl,
                 onboarding_completed: true,
@@ -105,13 +105,13 @@ export default function Onboarding() {
             if (contactsResult.error) throw new Error(contactsResult.error);
 
             // 4. Build experience rows
-            const experiences: Omit<Experience, 'id' | 'user_id'>[] = [];
+            const experiences: Omit<Experience, 'id' | 'user_id' | 'created_at'>[] = [];
 
             // Other degrees
             for (const degree of data.academics.otherDegrees) {
                 const isUG = degree.startsWith('Bachelor') || degree === 'World Bachelor in Business';
                 experiences.push({
-                    type: 'degree',
+                    exp_type: 'degree',
                     organization: 'Bocconi University',
                     role: degree,
                     level: isUG ? 'UG' : 'MSc',
@@ -126,7 +126,7 @@ export default function Onboarding() {
             for (const course of data.academics.courses) {
                 if (course.courseName.trim()) {
                     experiences.push({
-                        type: 'course',
+                        exp_type: 'course',
                         organization: course.courseName.trim(),
                         role: null,
                         level: null,
@@ -141,7 +141,7 @@ export default function Onboarding() {
             // Exchange
             if (data.academics.exchange.enabled && data.academics.exchange.destination.trim()) {
                 experiences.push({
-                    type: 'exchange',
+                    exp_type: 'exchange',
                     organization: data.academics.exchange.destination.trim(),
                     role: null,
                     level: data.academics.exchange.level || null,

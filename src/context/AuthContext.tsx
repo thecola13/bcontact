@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 import { fetchProfile } from '../lib/profile.service';
@@ -25,13 +25,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const [profile, setProfile] = useState<Profile | null>(null);
     const [profileLoading, setProfileLoading] = useState(true);
+    const hasLoadedOnce = useRef(false);
 
     // Fetch profile from Supabase
+    // Only shows loading state on the very first load to avoid unmounting children
     const loadProfile = useCallback(async (userId: string) => {
-        setProfileLoading(true);
+        if (!hasLoadedOnce.current) setProfileLoading(true);
         const data = await fetchProfile(userId);
         setProfile(data);
         setProfileLoading(false);
+        hasLoadedOnce.current = true;
     }, []);
 
     // Public refresh method (called after onboarding completes)
@@ -56,14 +59,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         });
 
         // 2. Listen for auth state changes
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
             setSession(session);
             setUser(session?.user ?? null);
             setLoading(false);
 
-            if (session?.user) {
+            // Only reload profile on sign-in events, NOT on USER_UPDATED
+            // (which fires after updateUser({ password }) and would remount the wizard)
+            if (session?.user && (event === 'SIGNED_IN' || event === 'INITIAL_SESSION')) {
                 loadProfile(session.user.id);
-            } else {
+            } else if (!session) {
                 setProfile(null);
                 setProfileLoading(false);
             }

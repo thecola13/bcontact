@@ -2,9 +2,9 @@
 // Mirrors the Supabase tables. Keep in sync with .antigravity/database/schema.md
 
 export interface Profile {
-    user_id: string;
-    name: string | null;
-    surname: string | null;
+    id: string;
+    first_name: string | null;
+    last_name: string | null;
     bio: string | null;
     avatar_url: string | null;
     current_degree: string | null;
@@ -13,34 +13,38 @@ export interface Profile {
 }
 
 export interface Contact {
+    id: string;
     user_id: string;
-    email: string | null;
+    personal_email: string | null;
     phone: string | null;
+    linkedin_url: string | null;
+    visibility: 'private' | 'all_verified';
+    updated_at: string | null;
     linkedin: string | null;
     instagram: string | null;
-    visibility: 'private' | 'all_verified';
 }
 
 export type ExperienceType = 'degree' | 'course' | 'exchange' | 'internship';
 
 export interface Experience {
-    id?: string;
+    id: string;
     user_id: string;
-    type: ExperienceType;
-    organization: string;       // host: university, company, course name
-    role: string | null;        // job title, degree name, etc.
+    exp_type: string;
+    organization: string | null;
+    role: string | null;
     start_date: string | null;
     end_date: string | null;
-    level: string | null;       // UG / MSc / Free Mover
-    semester: string | null;    // 1st / 2nd
-    code: string | null;        // course code
+    created_at: string | null;
+    level: string | null;
+    semester: string | null;
+    code: string | null;
 }
 
 // ─── Onboarding Form State ──────────────────────────────
 
 export interface OnboardingIdentity {
-    name: string;
-    surname: string;
+    firstName: string;
+    lastName: string;
 }
 
 export interface OnboardingCourse {
@@ -82,7 +86,7 @@ export interface OnboardingData {
 }
 
 export const INITIAL_ONBOARDING_DATA: OnboardingData = {
-    identity: { name: '', surname: '' },
+    identity: { firstName: '', lastName: '' },
     academics: {
         currentDegree: '',
         otherDegrees: [],

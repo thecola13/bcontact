@@ -7,7 +7,7 @@ export async function fetchProfile(userId: string): Promise<Profile | null> {
     const { data, error } = await supabase
         .from('profiles')
         .select('*')
-        .eq('user_id', userId)
+        .eq('id', userId)
         .single();
 
     if (error) {
@@ -19,12 +19,12 @@ export async function fetchProfile(userId: string): Promise<Profile | null> {
 
 export async function updateProfile(
     userId: string,
-    updates: Partial<Omit<Profile, 'user_id' | 'created_at'>>
+    updates: Partial<Omit<Profile, 'id' | 'created_at'>>
 ): Promise<{ error: string | null }> {
     const { error } = await supabase
         .from('profiles')
         .update(updates)
-        .eq('user_id', userId);
+        .eq('id', userId);
 
     return { error: error?.message ?? null };
 }
@@ -47,7 +47,7 @@ export async function fetchContacts(userId: string): Promise<Contact | null> {
 
 export async function updateContacts(
     userId: string,
-    updates: Partial<Omit<Contact, 'user_id'>>
+    updates: Partial<Omit<Contact, 'id' | 'user_id'>>
 ): Promise<{ error: string | null }> {
     const { error } = await supabase
         .from('contacts')
@@ -61,7 +61,7 @@ export async function updateContacts(
 
 export async function insertExperiences(
     userId: string,
-    items: Omit<Experience, 'id' | 'user_id'>[]
+    items: Omit<Experience, 'id' | 'user_id' | 'created_at'>[]
 ): Promise<{ error: string | null }> {
     if (items.length === 0) return { error: null };
 
