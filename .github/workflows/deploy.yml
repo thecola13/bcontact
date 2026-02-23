@@ -12,17 +12,35 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          
       - run: npm ci
+      
+      # Added env block to inject Supabase secrets during build
       - run: npm run build
-      - uses: actions/upload-pages-artifact@v2
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          
+      # Added step: Copy index.html to 404.html for React Router to work on refresh
+      - run: cp dist/index.html dist/404.html
+      
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
   deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    steps:
-      - uses: actions/deploy-pages@v2
+      needs: build
+      runs-on: ubuntu-latest
+      
+      environment:
+        name: github-pages
+        url: ${{ steps.deployment.outputs.page_url }}
+        
+      permissions:
+        pages: write
+        id-token: write
+        
+      steps:
+        - name: Deploy to GitHub Pages
+          id: deployment
+          uses: actions/deploy-pages@v4 # ⚠️ This MUST be v4
