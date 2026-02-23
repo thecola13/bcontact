@@ -23,9 +23,16 @@ export default function Dashboard() {
                         <strong className="text-accent">{user?.email}</strong>
                     </p>
                     <button
+                        onClick={() => navigate('/profile')}
+                        className="btn"
+                        style={{ marginTop: 'var(--space-xl)', width: '100%' }}
+                    >
+                        Edit Profile
+                    </button>
+                    <button
                         onClick={handleSignOut}
                         className="btn-ghost"
-                        style={{ marginTop: 'var(--space-xl)', width: '100%' }}
+                        style={{ marginTop: 'var(--space-sm)', width: '100%' }}
                     >
                         Sign Out
                     </button>

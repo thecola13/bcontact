@@ -71,7 +71,30 @@ export async function insertExperiences(
     return { error: error?.message ?? null };
 }
 
-// ─── Avatar Upload ──────────────────────────────────────
+export async function fetchExperiences(userId: string): Promise<Experience[]> {
+    const { data, error } = await supabase
+        .from('experiences')
+        .select('*')
+        .eq('user_id', userId);
+
+    if (error) {
+        console.error('fetchExperiences error:', error.message);
+        return [];
+    }
+    return (data as Experience[]) ?? [];
+}
+
+export async function deleteExperiences(
+    userId: string
+): Promise<{ error: string | null }> {
+    const { error } = await supabase
+        .from('experiences')
+        .delete()
+        .eq('user_id', userId);
+
+    return { error: error?.message ?? null };
+}
+
 
 export async function uploadAvatar(
     userId: string,

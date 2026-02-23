@@ -1,0 +1,349 @@
+/* ===========================
+   Profile Page Styles
+   ========================= */
+
+.profile {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: var(--space-2xl) var(--space-lg);
+    position: relative;
+}
+
+.profile-container {
+    width: 100%;
+    max-width: 640px;
+}
+
+/* ── Top Bar ─────────────────── */
+.profile-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-xl);
+}
+
+.profile-topbar h1 {
+    font-size: var(--font-size-2xl);
+}
+
+.profile-back {
+    font-size: var(--font-size-sm);
+    padding: 0.5rem 1rem;
+}
+
+/* ── Header Card ─────────────── */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+}
+
+.profile-header-avatar {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.profile-header-avatar img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--color-accent);
+    box-shadow: 0 0 20px var(--color-accent-glow);
+}
+
+.profile-header-avatar .avatar-placeholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--color-bg-input);
+    border: 2px dashed var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--color-text-muted);
+}
+
+.profile-header-info h2 {
+    font-size: var(--font-size-xl);
+    margin-bottom: 2px;
+}
+
+.profile-header-info .profile-email {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+.profile-email .lock-icon {
+    font-size: var(--font-size-xs);
+    opacity: 0.6;
+}
+
+/* ── Sections ────────────────── */
+.profile-section {
+    margin-bottom: var(--space-lg);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-bg-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
+    transition: border-color var(--transition-base);
+}
+
+.profile-section:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-lg) var(--space-xl);
+    cursor: pointer;
+    user-select: none;
+    transition: background var(--transition-base);
+}
+
+.section-header:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.section-header-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.section-icon {
+    font-size: var(--font-size-lg);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+}
+
+.section-header h3 {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+}
+
+.section-header p {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-top: 2px;
+}
+
+.section-chevron {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    transition: transform var(--transition-base);
+    flex-shrink: 0;
+}
+
+.section-chevron.open {
+    transform: rotate(180deg);
+}
+
+/* ── Section Body ────────────── */
+.section-body {
+    padding: 0 var(--space-xl) var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    animation: sectionSlideIn 0.25s ease-out;
+}
+
+@keyframes sectionSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section-divider {
+    height: 1px;
+    background: var(--color-border);
+    margin: 0 var(--space-xl);
+}
+
+/* ── Section Footer (Save) ───── */
+.section-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+}
+
+.btn-save {
+    font-size: var(--font-size-sm);
+    padding: 0.5rem 1.25rem;
+}
+
+/* ── Textarea ────────────────── */
+textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-family: var(--font-family);
+    font-size: var(--font-size-md);
+    color: var(--color-text-primary);
+    background: var(--color-bg-input);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    outline: none;
+    transition: all var(--transition-base);
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.6;
+}
+
+textarea:focus {
+    background: var(--color-bg-input-focus);
+    border-color: var(--color-border-focus);
+    box-shadow: var(--shadow-input-focus);
+}
+
+textarea::placeholder {
+    color: var(--color-text-muted);
+}
+
+/* ── Read-only email field ───── */
+.input-readonly {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-family: var(--font-family);
+    font-size: var(--font-size-md);
+    color: var(--color-text-muted);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: not-allowed;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+/* ── Success / Error Toast ───── */
+.save-toast {
+    font-size: var(--font-size-sm);
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-sm);
+    animation: toastFadeIn 0.2s ease-out;
+}
+
+.save-toast.success {
+    color: var(--color-success);
+    background: var(--color-success-bg);
+    border: 1px solid var(--color-success-border);
+}
+
+.save-toast.error {
+    color: var(--color-error);
+    background: var(--color-error-bg);
+    border: 1px solid var(--color-error-border);
+}
+
+@keyframes toastFadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ── Avatar Upload (Profile) ─── */
+.profile-upload-area {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.profile-upload-area:hover {
+    border-color: var(--color-accent);
+    background: rgba(59, 130, 246, 0.03);
+}
+
+.profile-upload-area.has-preview {
+    padding: var(--space-md);
+}
+
+.profile-upload-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto var(--space-sm);
+    display: block;
+    border: 3px solid var(--color-accent);
+    box-shadow: 0 0 20px var(--color-accent-glow);
+}
+
+/* ── Sign Out button ─────────── */
+.profile-signout {
+    margin-top: var(--space-md);
+}
+
+.btn-danger {
+    background: transparent;
+    color: var(--color-error);
+    border: 1px solid var(--color-error-border);
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: var(--color-error);
+    color: #fff;
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.25);
+}
+
+/* ── Responsive ──────────────── */
+@media (max-width: 640px) {
+    .profile {
+        padding: var(--space-lg) var(--space-md);
+    }
+
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .section-header {
+        padding: var(--space-md);
+    }
+
+    .section-body {
+        padding: 0 var(--space-md) var(--space-md);
+    }
+
+    .section-divider {
+        margin: 0 var(--space-md);
+    }
+
+    .field-row {
+        grid-template-columns: 1fr;
+    }
+}
